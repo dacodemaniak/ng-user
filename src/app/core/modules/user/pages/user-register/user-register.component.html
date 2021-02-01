@@ -1,0 +1,30 @@
+<form [formGroup]="registerForm" (ngSubmit)="register()">
+    <mat-form-field>
+        <input matInput type="text" placeholder="User name" formControlName="username">
+        <mat-error>
+            <ng-container *ngFor="let validation of validationMessages.username">
+                <div *ngIf="c.username.hasError(validation.type) && (c.username.dirty || c.username.touched)">
+                    {{ validation.message }}
+                </div>                
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput type="email" placeholder="User email" formControlName="email">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput type="email" placeholder="Confirm User email" formControlName="confirmEmail">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput type="password" placeholder="User password" formControlName="password">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput type="password" placeholder="Confirm User password" formControlName="confirmPassword">
+    </mat-form-field>
+
+    <button [disabled]="registerForm.invalid" mat-raised-button color="primary">Register</button>
+</form>
