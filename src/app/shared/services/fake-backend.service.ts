@@ -42,9 +42,16 @@ export class FakeBackendService implements HttpInterceptor {
       }
 
       function add(request: HttpRequest<any>): Observable<HttpResponse<any>> {
+        let nextId: number;
+        if (users.length) {
+          nextId = users[users.length - 1].id + 1;
+        } else {
+          nextId = 1;
+        }
+        request.body.id = nextId;
         users.push(request.body);
         localStorage.setItem('users', JSON.stringify(users));
-        return of(new HttpResponse({status: 200}))
+        return of(new HttpResponse({status: 200, body: request.body}))
       }
 
       function all(): Observable<HttpResponse<any>> {

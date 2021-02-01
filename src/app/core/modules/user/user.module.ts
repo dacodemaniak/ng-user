@@ -6,9 +6,10 @@ import { UserRegisterComponent } from './pages/user-register/user-register.compo
 
 import { UiModule } from './../../../shared/modules/ui/ui.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoginComponent } from './pages/login/login.component';
 
 @NgModule({
-  declarations: [UserRegisterComponent],
+  declarations: [UserRegisterComponent, LoginComponent],
   imports: [
     CommonModule,
     UserRoutingModule,
