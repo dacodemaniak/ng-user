@@ -1,6 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserModel } from 'src/app/shared/models/user-model';
 import { MustMatch } from 'src/app/shared/validators/must-match';
+
 
 @Component({
   selector: 'app-user-register',
@@ -13,7 +16,8 @@ export class UserRegisterComponent implements OnInit {
   public validationMessages: any;
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private httpClient: HttpClient
   ) { 
     this.setValidationMessages();
   }
@@ -69,6 +73,10 @@ export class UserRegisterComponent implements OnInit {
 
   public register(): void {
     console.log(`${JSON.stringify(this.registerForm.value)}`)
+    this.httpClient.post<any>(
+      'http://localhost/api/v2/user',
+      new UserModel().deserialize(this.registerForm.value)
+    ).subscribe();
   }
 
   private setValidationMessages(): void {
