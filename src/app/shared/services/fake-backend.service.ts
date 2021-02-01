@@ -4,7 +4,7 @@ import {
   HttpHandler,
   HttpInterceptor, HttpRequest, HttpResponse, HTTP_INTERCEPTORS
 } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { delay, dematerialize, materialize, mergeMap } from 'rxjs/operators';
 
 const users: any[] = JSON.parse(localStorage.getItem('users')) || [];
@@ -33,6 +33,8 @@ export class FakeBackendService implements HttpInterceptor {
           return all();
         case userRegex.test(url) && method ==='POST':
           return add(request);
+        case userRegex.test(url) && method ==='PUT':
+            return authenticate(request);
         case userFindRegex.test(url) && method === 'GET':
           return;
         case userFindRegex.test(url) && method === 'DELETE' :
@@ -52,6 +54,18 @@ export class FakeBackendService implements HttpInterceptor {
         users.push(request.body);
         localStorage.setItem('users', JSON.stringify(users));
         return of(new HttpResponse({status: 200, body: request.body}))
+      }
+
+      function authenticate(request): Observable<HttpResponse<any>> {
+
+        const user: any = users.find((obj: any) => obj.email === request.body.login && obj.password === request.body.password);
+        
+        console.log(`${JSON.stringify(user)} found with ${request.body.password}`);
+
+        if (user !== undefined) {
+          return of(new HttpResponse<any>({status: 200, body: user}))
+        }
+        throwError({status: 403, error: {message: 'Unauthorized'}});
       }
 
       function all(): Observable<HttpResponse<any>> {

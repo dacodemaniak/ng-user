@@ -1,4 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { UserModel } from 'src/app/shared/models/user-model';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -6,10 +11,37 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  public loginForm: FormGroup;
 
-  constructor() { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
+    this.loginForm = this.formBuilder.group({
+      login: [
+        '',
+        Validators.required
+      ],
+      password: [
+        '',
+        Validators.required
+      ]
+    });
+  }
+
+  public login(): void {
+    this.userService.authenticate(this.loginForm.value)
+      .subscribe((user: UserModel) => {
+        // Go Home
+        this.router.navigate(['/', 'home']);
+      }, (error: any) => {
+        // Bad credentials... clear form, don't move
+        this.loginForm.reset();
+        // Better inform the user...
+      })
   }
 
 }
