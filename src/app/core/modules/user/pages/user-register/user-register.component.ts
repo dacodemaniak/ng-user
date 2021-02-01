@@ -1,6 +1,11 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { UserModel } from 'src/app/shared/models/user-model';
 import { MustMatch } from 'src/app/shared/validators/must-match';
+
 
 @Component({
   selector: 'app-user-register',
@@ -13,7 +18,10 @@ export class UserRegisterComponent implements OnInit {
   public validationMessages: any;
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private httpClient: HttpClient,
+    private router: Router,
+    private snackBar: MatSnackBar
   ) { 
     this.setValidationMessages();
   }
@@ -69,6 +77,15 @@ export class UserRegisterComponent implements OnInit {
 
   public register(): void {
     console.log(`${JSON.stringify(this.registerForm.value)}`)
+    this.httpClient.post<any>(
+      'http://localhost/api/v2/user',
+      new UserModel().deserialize(this.registerForm.value)
+    ).subscribe((user: UserModel) => {
+      this.router.navigate(['./', 'user', 'login']).then(() => {
+        // Here goes the SnackBar
+        this.snackBar.open('You\'ve got registered, thanks', '', {duration: 3000, horizontalPosition: 'center'})
+      })
+    });
   }
 
   private setValidationMessages(): void {
