@@ -1,4 +1,7 @@
 <div>
     <div appPopOut componentType="logout">Click Me</div>
+    <button type="button" (click)="switchLanguage()">
+        {{ 'language.switch' | translate }}
+    </button>
 </div>
 <router-outlet></router-outlet>

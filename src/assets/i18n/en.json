@@ -1,0 +1,10 @@
+{
+    "_common": "************ Common strings ***************",
+    "common": {
+        "title": "User"
+    },
+    "language": {
+        "switch": "Change language"
+    },
+    "register": "Register"
+}

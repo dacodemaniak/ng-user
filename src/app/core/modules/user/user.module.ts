@@ -8,6 +8,7 @@ import { UiModule } from './../../../shared/modules/ui/ui.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './pages/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [UserRegisterComponent, LoginComponent, LogoutComponent],
@@ -15,7 +16,8 @@ import { LogoutComponent } from './components/logout/logout.component';
     CommonModule,
     UserRoutingModule,
     UiModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ]
 })
 export class UserModule { }

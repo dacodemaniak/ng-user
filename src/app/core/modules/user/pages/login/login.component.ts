@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { UserModel } from 'src/app/shared/models/user-model';
 import { UserService } from '../../services/user.service';
 
@@ -16,8 +18,12 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private router: Router
-  ) { }
+    private router: Router,
+    titleService: Title,
+    private translateService: TranslateService
+  ) { 
+    titleService.setTitle(this.translateService.instant('common.title'));
+  }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
