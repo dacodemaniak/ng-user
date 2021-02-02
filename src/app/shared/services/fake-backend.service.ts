@@ -43,7 +43,7 @@ export class FakeBackendService implements HttpInterceptor {
         case userFindRegex.test(url) && method === 'GET':
           return findByName();
         case userFindRegex.test(url) && method === 'DELETE' :
-          return;
+          return remove();
         default:
           return next.handle(request);
       }
@@ -83,6 +83,16 @@ export class FakeBackendService implements HttpInterceptor {
           return of(new HttpResponse<any>({status: 409}))
         }
         return of(new HttpResponse({status: 200}));
+      }
+
+      function remove(): Observable<HttpResponse<any>> {
+        const index: number = users.findIndex((obj: any) => obj.id === idFromUrl());
+        if (index != -1) {
+          users.splice(index, 1);
+          localStorage.setItem('users', JSON.stringify(users));
+          return of(new HttpResponse({status: 200}));
+        }
+        return of(new HttpResponse({status: 404}));
       }
 
       function get(): Observable<HttpResponse<any>> {

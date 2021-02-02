@@ -1,1 +1,28 @@
-<p>home works!</p>
+<ng-container *ngIf="users else loading;">
+    <table border="0">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>email</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users | async">
+                <td>
+                    {{ user.username }}
+                </td>
+                <td>
+                    {{ user.email }}
+                </td>
+                <td>
+                    <button type="button" (click)="remove(user)">X</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</ng-container>
+
+<ng-template #loading>
+    Chargement en cours...
+</ng-template>

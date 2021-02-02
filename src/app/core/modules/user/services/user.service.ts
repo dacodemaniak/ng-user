@@ -1,7 +1,7 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, take, tap } from 'rxjs/operators';
 import { UserModel } from 'src/app/shared/models/user-model';
 
 @Injectable({
@@ -13,11 +13,29 @@ export class UserService {
     private httpClient: HttpClient
   ) { }
 
+  all(): Observable<UserModel[]> {
+    return this.httpClient.get<any>(
+      'http://localhost:4200/api/v2/user'
+    ).pipe(
+      take(1),
+      map((users) => users.map((user: any) => new UserModel().deserialize(user)))
+    );
+  }
+
   add(userModel: UserModel): Observable<UserModel> {
     return this.httpClient.post<UserModel>(
       'http://localhost:4200/api/v2/user',
       userModel
     )
+  }
+
+  remove(user: UserModel): Observable<HttpResponse<any>> {
+    return this.httpClient.delete<any>(
+      'http://localhost:4200/api/v2/user/' + user.getId(),
+      {
+        observe: 'response'
+      }
+    );
   }
 
   authenticate(credentials: any): Observable<UserModel> {
