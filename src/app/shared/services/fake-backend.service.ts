@@ -26,8 +26,10 @@ export class FakeBackendService implements HttpInterceptor {
 
     function handleRoute(): Observable<HttpEvent<any>> {
       const userRegex: RegExp = /\api\/v2\/user+$/;
-      const userFindRegex: RegExp = /\api\/v2\/user\/d+$/;
-      const userByNameRegex: RegExp = /\api\/v2\/user\/w+$/;
+      const userFindRegex: RegExp = /\api\/v2\/user\/\d+$/;
+      const userByNameRegex: RegExp = /\api\/v2\/user\/\w+$/;
+
+      console.log(`Try to reach : ${request.url}`);
 
       switch (true) {
         case userRegex.test(url) && method === 'GET':
@@ -39,7 +41,7 @@ export class FakeBackendService implements HttpInterceptor {
         case userRegex.test(url) && method ==='PUT':
             return authenticate(request);
         case userFindRegex.test(url) && method === 'GET':
-          return;
+          return findByName();
         case userFindRegex.test(url) && method === 'DELETE' :
           return;
         default:
@@ -78,9 +80,9 @@ export class FakeBackendService implements HttpInterceptor {
       function findByName() {
         const user: any = users.find((obj: any) => obj.username === idFromUrl());
         if (user !== undefined) {
-          return of(new HttpResponse<any>({status: 200, body: user}))
+          return of(new HttpResponse<any>({status: 409}))
         }
-        throwError({status: 403, error: {message: 'Unauthorized'}});
+        return of(new HttpResponse({status: 200}));
       }
 
       function get(): Observable<HttpResponse<any>> {
@@ -92,10 +94,11 @@ export class FakeBackendService implements HttpInterceptor {
         const urlParts = url.split('/');
         const suffix: number = +urlParts[urlParts.length - 1];
 
+        console.log(`Suffix ${suffix}`)
         if (!isNaN(suffix)) {
           return suffix;
         }
-        urlParts[urlParts.length - 1];
+        return urlParts[urlParts.length - 1];
 
       }
     }

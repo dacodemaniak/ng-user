@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UserModel } from 'src/app/shared/models/user-model';
 import { MustMatch } from 'src/app/shared/validators/must-match';
+import { UserNameValidatorService } from '../../services/user-name-validator.service';
 
 
 @Component({
@@ -21,7 +22,8 @@ export class UserRegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private userNameValidator: UserNameValidatorService
   ) { 
     this.setValidationMessages();
   }
@@ -37,7 +39,8 @@ export class UserRegisterComponent implements OnInit {
         Validators.compose([
           Validators.required,
           Validators.minLength(5)
-        ])
+        ]),
+        this.userNameValidator.alreadyExists.bind(this.userNameValidator)
       ],
       email: [
         '',
@@ -92,7 +95,8 @@ export class UserRegisterComponent implements OnInit {
     this.validationMessages = {
       username: [
         {type: 'required', message: 'User name is required'},
-        {type: 'minlength', message: 'User name required at least 5 chars'}
+        {type: 'minlength', message: 'User name required at least 5 chars'},
+        { type: 'alreadyExists', message: 'This username already exists, choose a new one'}
       ],
       email: [
         {type: 'required', message: 'User email is required'},
