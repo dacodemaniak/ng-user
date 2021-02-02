@@ -27,10 +27,13 @@ export class FakeBackendService implements HttpInterceptor {
     function handleRoute(): Observable<HttpEvent<any>> {
       const userRegex: RegExp = /\api\/v2\/user+$/;
       const userFindRegex: RegExp = /\api\/v2\/user\/d+$/;
+      const userByNameRegex: RegExp = /\api\/v2\/user\/w+$/;
 
       switch (true) {
         case userRegex.test(url) && method === 'GET':
           return all();
+        case userByNameRegex.test(url) && method === 'GET':
+            return findByName();
         case userRegex.test(url) && method ==='POST':
           return add(request);
         case userRegex.test(url) && method ==='PUT':
@@ -70,6 +73,14 @@ export class FakeBackendService implements HttpInterceptor {
 
       function all(): Observable<HttpResponse<any>> {
         return of(new HttpResponse({status: 200, body: users}))
+      }
+
+      function findByName() {
+        const user: any = users.find((obj: any) => obj.username === idFromUrl());
+        if (user !== undefined) {
+          return of(new HttpResponse<any>({status: 200, body: user}))
+        }
+        throwError({status: 403, error: {message: 'Unauthorized'}});
       }
 
       function get(): Observable<HttpResponse<any>> {
