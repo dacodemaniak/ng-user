@@ -6,8 +6,12 @@ import { MatInputModule } from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 
+import { PopOutDirective } from './directives/pop-out.directive';
+
 @NgModule({
-  declarations: [],
+  declarations: [
+    PopOutDirective
+  ],
   imports: [
     CommonModule
   ],
@@ -15,7 +19,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    PopOutDirective
   ]
 })
 export class UiModule { }

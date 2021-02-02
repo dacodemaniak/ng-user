@@ -8,6 +8,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { fakeBackendProvider } from './shared/services/fake-backend.service';
 import { HomeComponent } from './pages/home/home.component';
 
+import { UiModule } from './shared/modules/ui/ui.module';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,7 +19,8 @@ import { HomeComponent } from './pages/home/home.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    UiModule
   ],
   providers: [
     fakeBackendProvider
